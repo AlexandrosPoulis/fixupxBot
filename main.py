@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import logging
 from dotenv import load_dotenv
+import asyncio
 import os
 import re
 
@@ -35,6 +36,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+    await asyncio.sleep(1)
     if message.author == bot.user:
         return
     
@@ -59,3 +61,4 @@ async def on_message(message):
     await bot.process_commands(message)
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
+
