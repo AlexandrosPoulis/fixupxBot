@@ -13,7 +13,7 @@ load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 #token = os.environ['discordkey']
 
-handler = logging.FileHandler(filename='discord.log', encoding = 'utf-8', mode='w')
+#handler = logging.FileHandler(filename='discord.log', encoding = 'utf-8', mode='w')
 intents = discord.Intents.default()
 # enable in developer site first and then here
 intents.message_content = True
@@ -69,7 +69,8 @@ def run_bot():
             time.sleep(60)
 
 webserver.keep_alive()
-bot.run(token, log_handler=handler, log_level=logging.DEBUG)
+bot.run(token)
+
 
 
 
