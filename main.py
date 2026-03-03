@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import asyncio
 import os
 import re
+import time
 import webserver
 
 # to load the key
@@ -34,32 +35,37 @@ async def get_channel_webhook(channel):
 async def on_ready():
     print(f"We are ready to go in, {bot.user.name}")
 
+def run_bot():
+    while True:
+        try:
+            @bot.event
+            async def on_message(message):
+                await asyncio.sleep(1)
+                if message.author == bot.user:
+                    return
+                
+                if ("https://x.com/" in message.content.lower()):# and (message.channel.id == 730425091212705952):
+                    
+                    channel = bot.get_channel(message.channel.id)
+                    webhook = await get_channel_webhook(channel)
+                    
+                    await message.delete()
+                    new_content = message.content.replace(
+                        "https://x.com/",
+                        "https://fixupx.com/"
+                    )
 
-@bot.event
-async def on_message(message):
-    await asyncio.sleep(1)
-    if message.author == bot.user:
-        return
-    
-    if ("https://x.com/" in message.content.lower()):# and (message.channel.id == 730425091212705952):
-        
-        channel = bot.get_channel(message.channel.id)
-        webhook = await get_channel_webhook(channel)
-        
-        await message.delete()
-        new_content = message.content.replace(
-            "https://x.com/",
-            "https://fixupx.com/"
-        )
+                    
+                    await webhook.send(
+                    content=new_content,
+                    username=f"{message.author.display_name} (link fixed)",
+                    avatar_url=message.author.display_avatar.url
+                    )
 
-        
-        await webhook.send(
-        content=new_content,
-        username=f"{message.author.display_name} (link fixed)",
-        avatar_url=message.author.display_avatar.url
-        )
-
-    await bot.process_commands(message)
+                await bot.process_commands(message)
+        except Exception as e:
+            print("Reconnect error:", e)
+            time.sleep(60)
 
 webserver.keep_alive()
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
