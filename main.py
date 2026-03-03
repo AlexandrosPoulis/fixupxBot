@@ -9,8 +9,9 @@ import time
 import webserver
 
 # to load the key
-load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
+#load_dotenv()
+#token = os.getenv('DISCORD_TOKEN')
+token = os.environ['discordkey']
 
 handler = logging.FileHandler(filename='discord.log', encoding = 'utf-8', mode='w')
 intents = discord.Intents.default()
@@ -69,5 +70,6 @@ def run_bot():
 
 webserver.keep_alive()
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
+
 
 
