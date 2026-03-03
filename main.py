@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import asyncio
 import os
 import re
+import webserver
 
 # to load the key
 load_dotenv()
@@ -60,5 +61,7 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+webserver.keep_alive()
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
+
 
